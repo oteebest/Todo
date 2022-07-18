@@ -18,6 +18,21 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddIdentity();
 builder.Services.RegisterServices();
 
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+var AllowCorsForList = configuration.GetSection("AllowCorsForList").Value.Split(',');
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+    builder =>
+    {
+        builder.WithOrigins(AllowCorsForList)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("Content-Disposition", "Content-Length"); ;
+    });
+});
 
 var app = builder.Build();
 
@@ -27,6 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

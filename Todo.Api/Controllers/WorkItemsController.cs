@@ -37,6 +37,12 @@ namespace Todo.Api.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             return Ok(await _mediator.Send(new GetWorkItemQuery { Id = id }));
-        }      
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            return Ok(await _mediator.Send(new DeleteWorkItemCommand { Id = id }));
+        }
     }
 }
